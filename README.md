@@ -27,14 +27,18 @@ git clone https://github.com/strapi/strapi.git
 
 - Check the project folders like src/, package.json, node_modules/.
 
-4. Create a New Strapi Project
+4. clone my github repository 
+
+- https://github.com/RakeshKanzariya2218/strapi-sample-project-1.git
+
+5. Inside my git repo Create a New Strapi Project
 
 - npx create-strapi@latest rakesh-strapi-project --quickstart
 
 
 - This creates a new folder rakesh-strapi-project
 
-5. Run Strapi Locally
+6. Run Strapi Locally
 
 - cd rakesh-strapi-project
 - npm run develop
@@ -44,7 +48,7 @@ git clone https://github.com/strapi/strapi.git
 
 - First-time login: create admin account (email + password).
 
-6. Create Content Type: Blog
+7. Create Content Type: Blog
 
 - Fields:
 
@@ -54,7 +58,7 @@ git clone https://github.com/strapi/strapi.git
 
 - publishedOn → Date
 
-7. Create Sample Blog & Publish
+8. Create Sample Blog & Publish
 
 - Add a blog entry.
 
@@ -62,7 +66,7 @@ git clone https://github.com/strapi/strapi.git
 
 - Publish the blog.
 
-8. Access Blog via API
+9. Access Blog via API
 
 All blogs: http://localhost:1337/api/blogs
 
