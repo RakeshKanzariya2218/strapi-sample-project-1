@@ -22,3 +22,8 @@ variable "key_name" {
 variable "project_name" {
   default = "rakesh"
 }
+
+variable "docker_image_tag" {
+  description = "Docker image tag to deploy on EC2"
+  type        = string
+}
