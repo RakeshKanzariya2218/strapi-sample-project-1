@@ -23,7 +23,7 @@ variable "instance_type" {
 }
 
 variable "key_name" {
-  description = "EC2 Key Pair name"
+  description = "key-1"
 }
 
 variable "project_name" {

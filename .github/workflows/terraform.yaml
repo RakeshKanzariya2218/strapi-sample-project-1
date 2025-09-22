@@ -2,6 +2,10 @@ name: CD - Deploy with Terraform
 
 on:
   workflow_dispatch:
+    inputs:
+      docker_image_tag:
+        description: 'Docker image tag to deploy'
+        required: true
 
 jobs:
   deploy:
