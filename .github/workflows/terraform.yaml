@@ -38,7 +38,10 @@ jobs:
         run: terraform -chdir=Terraform-infra init
 
       - name: Terraform Plan
-        run: terraform -chdir=Terraform-infra plan -var="docker_image_tag=$IMAGE_TAG"
+        run: terraform plan -chdir=Terraform-infra -parallelism=20 -var="docker_image_tag=$IMAGE_TAG"
+
+
 
       - name: Terraform Apply
-        run: terraform -chdir=Terraform-infra apply -auto-approve -var="docker_image_tag=$IMAGE_TAG"
+        run: terraform apply -chdir=Terraform-infra -parallelism=20 -var="docker_image_tag=$IMAGE_TAG" -auto-approve
+
