@@ -25,7 +25,7 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-          
+
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v2
         with:
@@ -35,13 +35,16 @@ jobs:
         run: echo "IMAGE_TAG=${{ github.event.inputs.docker_image_tag }}" >> $GITHUB_ENV
 
       - name: Terraform Init
-        run: terraform -chdir=Terraform-infra init
+        run: |
+          cd Terraform-infra
+          terraform init
 
       - name: Terraform Plan
-        run: terraform plan -chdir=Terraform-infra -parallelism=20 -var="docker_image_tag=$IMAGE_TAG"
-
-
+        run: |
+          cd Terraform-infra
+          terraform plan -parallelism=20 -var="docker_image_tag=$IMAGE_TAG"
 
       - name: Terraform Apply
-        run: terraform apply -chdir=Terraform-infra -parallelism=20 -var="docker_image_tag=$IMAGE_TAG" -auto-approve
-
+        run: |
+          cd Terraform-infra
+          terraform apply -parallelism=20 -var="docker_image_tag=$IMAGE_TAG" -auto-approve
