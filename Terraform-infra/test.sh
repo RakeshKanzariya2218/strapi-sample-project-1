@@ -9,4 +9,4 @@ aws ecr get-login-password --region us-east-1 | docker login --username AWS --pa
 docker volume create strapi-data
 docker pull 132866222051.dkr.ecr.us-east-1.amazonaws.com/strapi/strapi:${docker_image_tag}
 docker rm -f strapi || true
-docker run -dt -p 80:1337 -v strapi-data:/srv/app --name strapi -e APP_KEYS='["randomKey1","randomKey2","randomKey3","randomKey4"]' 132866222051.dkr.ecr.us-east-1.amazonaws.com/strapi/strapi:${docker_image_tag}
+docker run -dt -p 80:1337 -v strapi-data:/srv/app --name strapi 132866222051.dkr.ecr.us-east-1.amazonaws.com/strapi/strapi:${docker_image_tag}
