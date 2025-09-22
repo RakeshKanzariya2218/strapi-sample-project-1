@@ -1,9 +1,9 @@
 terraform {
 
   backend "s3" {
-    bucket = "rkanzariya.info"
+    bucket = "rakesh.s3bucketpearlthoughts"
     key    = "terraform.tfstate"
-    region = "us-east-1"
+    region = "ap-south-1"
     encrypt      = true  
   }
 }
