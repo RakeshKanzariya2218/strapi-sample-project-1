@@ -6,8 +6,8 @@ yum install aws-cli -y
 systemctl start docker
 systemctl enable docker
 sleep 5
-export AWS_ACCESS_KEY_ID="${var.aws_access_key}" 
-export AWS_SECRET_ACCESS_KEY="${var.aws_secret_key}"
+export AWS_ACCESS_KEY_ID="${aws_access_key}"
+export AWS_SECRET_ACCESS_KEY="${aws_secret_key}"
 export AWS_DEFAULT_REGION="ap-south-1"
 
 aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 145065858967.dkr.ecr.ap-south-1.amazonaws.com

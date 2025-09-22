@@ -47,8 +47,11 @@ resource "aws_instance" "ec2" {
   subnet_id                   = aws_subnet.public_subnet_1.id
   vpc_security_group_ids      = [aws_security_group.ec2_sg.id]
   associate_public_ip_address = true
-  user_data                   = templatefile("${path.module}/test.sh", { docker_image_tag = var.docker_image_tag })
-
+   user_data = templatefile("${path.module}/test.sh", {
+    docker_image_tag = var.docker_image_tag
+    aws_access_key   = var.aws_access_key
+    aws_secret_key   = var.aws_secret_key
+  })
   tags = { Name = "${var.project_name}-strapi-ec2" }
 }
 
