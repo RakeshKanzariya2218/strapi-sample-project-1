@@ -36,7 +36,7 @@ resource "aws_instance" "ec2" {
   vpc_security_group_ids      = [aws_security_group.ec2_sg.id]
   associate_public_ip_address = true
   iam_instance_profile        = aws_iam_instance_profile.ec2_profile.name
-  user_data                   = file("test.sh")
+  user_data                   = templatefile("${path.module}/test.sh", { docker_image_tag = var.docker_image_tag })
 
   tags = { Name = "${var.project_name}-strapi-ec2" }
 }
