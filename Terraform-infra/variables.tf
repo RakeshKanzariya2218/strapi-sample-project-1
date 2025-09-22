@@ -3,7 +3,7 @@ variable "region" {
 }
 
 variable "vpc_id" {
-  default = "vpc-01b35def73b166fdc"
+  default = "vpc-0d9dbe1cfc6c7880c"
 }
 
 variable "public_subnet_1_cidr" {
