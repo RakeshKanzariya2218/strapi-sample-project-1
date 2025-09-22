@@ -1,0 +1,49 @@
+✅ CI workflow (ECR ke liye)
+
+Ye image banayega aur ECR me push karega.
+
+# .github/workflows/ci.yml
+name: CI - Build and Push Strapi Image to ECR
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    env:
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_ACCOUNT_ID: 132866222051   # apna AWS account ID
+      ECR_REPOSITORY: strapi/strapi  # tera ECR repo
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        run: |
+          aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+
+      - name: Build Docker image
+        run: |
+          IMAGE_TAG=latest-${{ github.sha }}
+          IMAGE_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "IMAGE_URI=$IMAGE_URI" >> $GITHUB_ENV
+          docker build -t $IMAGE_URI ./rakesh-strapi-project
+
+      - name: Push Docker image to ECR
+        run: docker push ${{ env.IMAGE_URI }}
+
+      - name: Save Docker Image Tag for Terraform
+        id: save-tag
+        run: echo "image_tag=${{ env.IMAGE_URI }}" >> $GITHUB_OUTPUT

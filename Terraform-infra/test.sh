@@ -1,0 +1,18 @@
+
+#!/bin/bash
+yum update -y
+yum install docker -y
+yum install aws-cli -y
+systemctl start docker
+systemctl enable docker
+sleep 5
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 132866222051.dkr.ecr.us-east-1.amazonaws.com
+docker volume create strapi-data
+docker pull 132866222051.dkr.ecr.us-east-1.amazonaws.com/strapi/strapi:latest
+docker run --rm -v strapi-data:/srv/app 132866222051.dkr.ecr.us-east-1.amazonaws.com/strapi/strapi:latest strapi new /srv/app --quickstart
+docker run -dt -p 80:1337 -v strapi-data:/srv/app --name strapi 132866222051.dkr.ecr.us-east-1.amazonaws.com/strapi/strapi:latest
+
+
+
+
+
