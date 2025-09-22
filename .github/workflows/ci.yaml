@@ -10,7 +10,7 @@ jobs:
     env:
       DOCKERHUB_USERNAME: rakeshkanzariya     
       DOCKERHUB_REPO: rakesh_strapi            
-      DOCKERHUB_PASSWORD: Rakesh@123
+      DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
