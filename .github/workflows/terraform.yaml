@@ -41,14 +41,21 @@ jobs:
       - name: Terraform Plan
         run: |
           cd Terraform-infra
-          terraform plan -parallelism=20 -var="docker_image_tag=$IMAGE_TAG"
+          terraform plan \
+            -input=false \
+            -parallelism=10 \
+            -var="docker_image_tag=$IMAGE_TAG" \
+            -var="aws_access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" \
+            -var="aws_secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}"
 
       - name: Terraform Apply
         run: |
           cd Terraform-infra
           terraform apply \
-            -parallelism=20 \
+            -input=false \
+            -parallelism=10 \
             -var="docker_image_tag=$IMAGE_TAG" \
             -var="aws_access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" \
             -var="aws_secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
             -auto-approve
+
