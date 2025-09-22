@@ -6,11 +6,14 @@ yum install aws-cli -y
 systemctl start docker
 systemctl enable docker
 sleep 5
-aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 132866222051.dkr.ecr.us-east-1.amazonaws.com
+export AWS_ACCESS_KEY_ID="${var.aws_access_key}" 
+export AWS_SECRET_ACCESS_KEY="${var.aws_secret_key}"
+export AWS_DEFAULT_REGION="ap-south-1"
+
+aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 145065858967.dkr.ecr.ap-south-1.amazonaws.com
 docker volume create strapi-data
-docker pull 132866222051.dkr.ecr.us-east-1.amazonaws.com/strapi/strapi:${docker_image_tag}
-docker run --rm -v strapi-data:/srv/app 132866222051.dkr.ecr.us-east-1.amazonaws.com/strapi/strapi:${docker_image_tag} strapi new /srv/app --quickstart --no-run
-docker run -dt -p 1337:1337 -v strapi-data:/srv/app --name strapi 132866222051.dkr.ecr.us-east-1.amazonaws.com/strapi/strapi:${docker_image_tag}
+docker pull 145065858967.dkr.ecr.ap-south-1.amazonaws.com/rakesh_strapi:${docker_image_tag}
+docker run --rm -v strapi-data:/srv/app 145065858967.dkr.ecr.ap-south-1.amazonaws.com/rakesh_strapi:${docker_image_tag} strapi new /srv/app --quickstart --no-run
 docker run -d \
   -p 1337:1337 \
   -v strapi-data:/srv/app \
@@ -22,4 +25,4 @@ docker run -d \
   -e FLAG_NPS=true \
   -e FLAG_PROMOTE_EE=true \
   --name strapi \
-  132866222051.dkr.ecr.us-east-1.amazonaws.com/strapi/strapi:${docker_image_tag}
+  145065858967.dkr.ecr.ap-south-1.amazonaws.com/rakesh_strapi:${docker_image_tag}

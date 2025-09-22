@@ -46,4 +46,9 @@ jobs:
       - name: Terraform Apply
         run: |
           cd Terraform-infra
-          terraform apply -parallelism=20 -var="docker_image_tag=$IMAGE_TAG" -auto-approve
+          terraform apply \
+            -parallelism=20 \
+            -var="docker_image_tag=$IMAGE_TAG" \
+            -var="aws_access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" \
+            -var="aws_secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
+            -auto-approve

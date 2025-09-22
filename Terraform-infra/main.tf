@@ -11,7 +11,7 @@ data "aws_ami" "amazon_linux_2" {
 resource "aws_security_group" "ec2_sg" {
   name        = "${var.project_name}-sg"
   description = "Allow SSH & HTTP from ALB"
-  vpc_id      = aws_vpc.vpc.id
+  vpc_id      = data.aws_vpc.vpc.id
 
   ingress {
     from_port       = 80
@@ -47,8 +47,9 @@ resource "aws_instance" "ec2" {
   subnet_id                   = aws_subnet.public_subnet_1.id
   vpc_security_group_ids      = [aws_security_group.ec2_sg.id]
   associate_public_ip_address = true
-  iam_instance_profile        = aws_iam_instance_profile.ec2_profile.name
   user_data                   = templatefile("${path.module}/test.sh", { docker_image_tag = var.docker_image_tag })
 
   tags = { Name = "${var.project_name}-strapi-ec2" }
 }
+
+
