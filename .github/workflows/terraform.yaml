@@ -12,8 +12,8 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      ECR_REGISTRY: 132866222051.dkr.ecr.us-east-1.amazonaws.com
-      ECR_REPOSITORY: strapi/strapi
+      ECR_REGISTRY: 145065858967.dkr.ecr.ap-south-1.amazonaws.com
+      ECR_REPOSITORY: rakesh_strapi
 
     steps:
       - name: Checkout code
@@ -24,8 +24,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-
+          aws-region: ap-south-1
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v2
         with:
