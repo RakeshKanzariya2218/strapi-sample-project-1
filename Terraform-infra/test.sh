@@ -9,7 +9,7 @@ sleep 5
 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 132866222051.dkr.ecr.us-east-1.amazonaws.com
 docker volume create strapi-data
 docker pull 132866222051.dkr.ecr.us-east-1.amazonaws.com/strapi/strapi:${docker_image_tag}
-docker run --rm -v strapi-data:/srv/app 132866222051.dkr.ecr.us-east-1.amazonaws.com/strapi/strapi:${docker_image_tag} strapi new /srv/app --quickstart
+docker run --rm -v strapi-data:/srv/app 132866222051.dkr.ecr.us-east-1.amazonaws.com/strapi/strapi:${docker_image_tag} strapi new /srv/app --quickstart --no-run
 docker run -dt -p 1337:1337 -v strapi-data:/srv/app --name strapi 132866222051.dkr.ecr.us-east-1.amazonaws.com/strapi/strapi:${docker_image_tag}
 docker run -d \
   -p 1337:1337 \
@@ -22,4 +22,4 @@ docker run -d \
   -e FLAG_NPS=true \
   -e FLAG_PROMOTE_EE=true \
   --name strapi \
-  132866222051.dkr.ecr.us-east-1.amazonaws.com/strapi/strapi:728eb5e9
+  132866222051.dkr.ecr.us-east-1.amazonaws.com/strapi/strapi:${docker_image_tag}
