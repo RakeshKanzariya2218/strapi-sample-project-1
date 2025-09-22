@@ -16,7 +16,7 @@ variable "instance_type" {
 }
 
 variable "key_name" {
-  description = "key-1"
+  default = "key-1"
 }
 
 variable "project_name" {
