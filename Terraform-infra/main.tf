@@ -17,7 +17,7 @@ resource "aws_security_group" "ec2_sg" {
     from_port       = 80
     to_port         = 80
     protocol        = "TCP"
-    security_groups = [aws_security_group.alb_sg.id]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
@@ -32,11 +32,11 @@ resource "aws_instance" "ec2" {
   ami                         = data.aws_ami.amazon_linux_2.id
   instance_type               = var.instance_type
   key_name                    = var.key_name
-  subnet_id                   = aws_subnet.private_subnet_1.id
+  subnet_id                   = aws_subnet.public_subnet_1.id
   vpc_security_group_ids      = [aws_security_group.ec2_sg.id]
-  associate_public_ip_address = false
+  associate_public_ip_address = true
   iam_instance_profile        = aws_iam_instance_profile.ec2_profile.name
   user_data                   = file("test.sh")
 
-  tags = { Name = "${var.project_name}-ec2" }
+  tags = { Name = "${var.project_name}-strapi-ec2" }
 }

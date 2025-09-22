@@ -28,6 +28,16 @@ jobs:
         run: |
           aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $ECR_REGISTRY
 
+      - name: Delete old Docker images from ECR
+        run: |
+          echo "Deleting old images from ECR repository $ECR_REPOSITORY"
+          IMAGE_IDS=$(aws ecr list-images --repository-name $ECR_REPOSITORY --query 'imageIds[*]' --output json)
+          if [ "$IMAGE_IDS" != "[]" ]; then
+            aws ecr batch-delete-image --repository-name $ECR_REPOSITORY --image-ids "$IMAGE_IDS"
+          else
+            echo "No images to delete"
+          fi
+
       - name: Build Docker image
         run: |
           IMAGE_TAG=${GITHUB_SHA::8}
