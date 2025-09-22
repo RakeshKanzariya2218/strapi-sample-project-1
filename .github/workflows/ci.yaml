@@ -1,9 +1,4 @@
-✅ CI workflow (ECR ke liye)
-
-Ye image banayega aur ECR me push karega.
-
-# .github/workflows/ci.yml
-name: CI - Build and Push Strapi Image to ECR
+name: CI - Build & Push Docker Image
 
 on:
   push:
@@ -15,35 +10,36 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      AWS_REGION: ${{ secrets.AWS_REGION }}
-      AWS_ACCOUNT_ID: 132866222051   # apna AWS account ID
-      ECR_REPOSITORY: strapi/strapi  # tera ECR repo
+      ECR_REGISTRY: 132866222051.dkr.ecr.us-east-1.amazonaws.com
+      ECR_REPOSITORY: strapi/strapi
 
     steps:
-      - name: Checkout repo
+      - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
+          aws-region: us-east-1
 
       - name: Login to Amazon ECR
+        id: login-ecr
         run: |
-          aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $ECR_REGISTRY
 
       - name: Build Docker image
+        id: build-image
         run: |
-          IMAGE_TAG=latest-${{ github.sha }}
-          IMAGE_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "IMAGE_URI=$IMAGE_URI" >> $GITHUB_ENV
-          docker build -t $IMAGE_URI ./rakesh-strapi-project
+          IMAGE_TAG=${GITHUB_SHA::8}
+          docker build -t $ECR_REPOSITORY:$IMAGE_TAG .
+          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
 
       - name: Push Docker image to ECR
-        run: docker push ${{ env.IMAGE_URI }}
+        run: |
+          docker tag $ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
-      - name: Save Docker Image Tag for Terraform
-        id: save-tag
-        run: echo "image_tag=${{ env.IMAGE_URI }}" >> $GITHUB_OUTPUT
+      - name: Output image tag
+        run: echo "docker-image-tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
