@@ -4,30 +4,28 @@ on:
   workflow_dispatch:
     inputs:
       docker_image_tag:
-        description: 'Docker image tag to deploy'
+        description: "Docker image tag to deploy"
         required: true
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
-    env:
-      DOCKERHUB_USERNAME: rakeshkanzariya      
-      DOCKERHUB_REPO: rakesh_strapi
-
     steps:
-      - name: Checkout code
+      - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Set Docker image tag
-        run: echo "IMAGE_TAG=${{ github.event.inputs.docker_image_tag }}" >> $GITHUB_ENV
-      
-      
-      - name: Install Terraform
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-south-1
+
+      - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
-        terraform_version: 1.6.0
-
+          terraform_version: 1.6.0
 
       - name: Terraform Init
         run: |
@@ -35,13 +33,14 @@ jobs:
           terraform init
 
       - name: Terraform Plan
+        env:
+          TF_VAR_dockerhub_username: ${{ secrets.DOCKERHUB_USERNAME }}
+          TF_VAR_dockerhub_token: ${{ secrets.DOCKERHUB_TOKEN }}
         run: |
           cd Terraform-infra
           terraform plan \
             -input=false \
-            -parallelism=10 \
-            -var="docker_image_tag=$IMAGE_TAG" \
-            -var="dockerhub_username=$DOCKERHUB_USERNAME"
+            -var="docker_image_tag=${{ github.event.inputs.docker_image_tag }}"
 
       - name: Terraform Apply
         env:
@@ -51,9 +50,8 @@ jobs:
           cd Terraform-infra
           terraform apply \
             -input=false \
-            -parallelism=10 \
             -auto-approve \
-            -var="docker_image_tag=$IMAGE_TAG"
+            -var="docker_image_tag=${{ github.event.inputs.docker_image_tag }}"
 
 
 
