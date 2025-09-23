@@ -36,7 +36,7 @@ systemctl enable docker
 
 sleep 5
 
-docker login -u rakeshkanzariya -p Rakesh@123
+echo "${dockerhub_token}" | docker login -u "${dockerhub_username}" --password-stdin
 docker volume create strapi-data
 docker pull rakeshkanzariya/rakesh_strapi:${docker_image_tag}
 docker run --rm -v strapi-data:/srv/app rakeshkanzariya/rakesh_strapi:${docker_image_tag} strapi new /srv/app --quickstart --no-run
@@ -52,3 +52,5 @@ docker run -d \
   -e FLAG_PROMOTE_EE=true \
   --name strapi \
   rakeshkanzariya/rakesh_strapi:${docker_image_tag}
+
+  

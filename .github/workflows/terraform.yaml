@@ -44,17 +44,16 @@ jobs:
             -var="dockerhub_username=$DOCKERHUB_USERNAME"
 
       - name: Terraform Apply
+        env:
+          TF_VAR_dockerhub_username: ${{ secrets.DOCKERHUB_USERNAME }}
+          TF_VAR_dockerhub_token: ${{ secrets.DOCKERHUB_TOKEN }}
         run: |
           cd Terraform-infra
           terraform apply \
             -input=false \
             -parallelism=10 \
-            -var="docker_image_tag=$IMAGE_TAG" \
-            -var="dockerhub_username=$DOCKERHUB_USERNAME" \
-            -auto-approve
-
-
-
+            -auto-approve \
+            -var="docker_image_tag=$IMAGE_TAG"
 
 
 

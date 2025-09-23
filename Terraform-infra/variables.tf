@@ -39,3 +39,14 @@ variable "aws_secret_key" {
   type        = string
   sensitive   = true
 }
+
+
+
+variable "dockerhub_username" {
+  type = string
+}
+
+variable "dockerhub_token" {
+  type      = string
+  sensitive = true
+}
