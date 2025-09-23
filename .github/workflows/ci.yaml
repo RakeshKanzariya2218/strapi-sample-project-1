@@ -1,3 +1,5 @@
+name: CI - push image in dockerhub 
+
 on:
   push:
     branches:
