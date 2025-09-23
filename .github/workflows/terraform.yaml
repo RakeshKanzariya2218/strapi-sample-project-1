@@ -48,10 +48,26 @@ jobs:
           TF_VAR_dockerhub_token: ${{ secrets.DOCKERHUB_TOKEN }}
         run: |
           cd Terraform-infra
-          terraform apply \
+          terraform destroy \
             -input=false \
             -auto-approve \
             -var="docker_image_tag=${{ github.event.inputs.docker_image_tag }}"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
